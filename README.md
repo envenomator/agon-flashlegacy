@@ -1,4 +1,4 @@
-# Agon legay firmware update utility
+# Agon legacy firmware update utility
 The Agon firmware update utility is able to flash MOS a file on the SD card on any Agon running MOS versions 1.00/1.01/1.02, without using any cables.
 
 ### Installation
