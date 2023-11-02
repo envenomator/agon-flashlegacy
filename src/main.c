@@ -30,26 +30,13 @@
 #define EXIT_FILENOTFOUND	4
 #define EXIT_INVALIDPARAMETER	19
 #define DEFAULT_MOSFIRMWARE	"MOS.bin"
-#define DEFAULT_VDPFIRMWARE	"firmware.bin"
-
-#define CMDUNKNOWN	0
-#define CMDALL		1
-#define CMDMOS		2
-#define CMDVDP		3
-#define CMDFORCE	4
-#define CMDBATCH	5
 
 int errno; // needed by standard library
 enum states{firmware,retry,systemreset};
 
-bool		flashmos = false;
 char		mosfilename[256];
-uint32_t	moscrc;
-bool		flashvdp = false;
-char		vdpfilename[256];
-uint32_t	vdpcrc;
-bool		optbatch = false;
-bool		optforce = false;		// No y/n user input required
+uint32_t	moscrc = 0;
+uint24_t	filesize = 0;
 
 // separate putch function that doesn't rely on a running MOS firmware
 // UART0 initialization done by MOS firmware previously
@@ -63,43 +50,6 @@ int putch(int c)
 	return c;
 }
 
-void beep(unsigned int number) {
-	while(number--) {
-		putch(7);
-		delayms(250);
-	}
-}
-
-uint8_t getCharAt(uint16_t x, uint16_t y) {
-	sysvar_t *sysvars = getsysvars();
-	delayms(20);
-	putch(23);
-	putch(0);
-	putch(131);
-	putch(x & 0xFF);
-	putch((x >> 8) & 0xFF);
-	putch(y & 0xFF);
-	putch((y >> 8) & 0xFF);
-	delayms(100);
-	return sysvars->scrchar;
-}
-
-bool vdp_ota_present(void) {
-	char test[UNLOCKMATCHLENGTH];
-	uint16_t n;
-
-	putch(23);
-	putch(0);
-	putch(0xA1);
-	putch(0);
-	printf("unlock");
-
-	for(n = 0; n < UNLOCKMATCHLENGTH+1; n++) test[n] = getCharAt(n+8, 3);
-	// 3 - line on-screen
-	if(memcmp(test, "unlocked!",UNLOCKMATCHLENGTH) == 0) return true;
-	else return false;
-}
-
 uint8_t mos_magicnumbers[] = {0xF3, 0xED, 0x7D, 0x5B, 0xC3};
 #define MOS_MAGICLENGTH 5
 bool containsMosHeader(uint8_t *filestart) {
@@ -110,33 +60,9 @@ bool containsMosHeader(uint8_t *filestart) {
 	return match;
 }
 
-uint8_t esp32_magicnumbers[] = {0x32, 0x54, 0xCD, 0xAB};
-#define ESP32_MAGICLENGTH 4
-#define ESP32_MAGICSTART 0x20
-bool containsESP32Header(uint8_t *filestart) {
-	uint8_t n;
-	bool match = true;
-
-	filestart += ESP32_MAGICSTART; // start of ESP32 magic header
-	for(n = 0; n < ESP32_MAGICLENGTH; n++) {
-		if(esp32_magicnumbers[n] != filestart[n]) match = false;
-	}
-	return match;
-}
-
 void print_version(void) {
-	printf("Agon firmware update utility v1.6\n\r\n\r");
+	printf("Agon legacy firmware update utility\n\r\n\r");
 }
-
-void usage(void) {
-	print_version();
-	printf("Usage: FLASH [all | [mos <filename>] [vdp <filename>] | batch] <-f>\n\r");
-}
-
-typedef enum {
-	MOS,
-	VDP
-} flashtype;
 
 bool getResponse(void) {
 	uint8_t response = 0;
@@ -148,39 +74,7 @@ bool getResponse(void) {
 	return response == 'y';
 }
 
-void askEscapeToContinue(void) {
-	uint8_t response = 0;
-
-	printf("Press ESC to continue");
-	while(response != 0x1B) response = tolower(getch());
-	printf("\r\n");
-}
-
-bool update_vdp(char *filename) {
-	uint8_t file;
-	uint24_t filesize;
-	uint24_t size, n;
-
-	putch(12); // cls
-	print_version();	
-	printf("Unlocking VDP updater...\r\n");
-	
-	if(!vdp_ota_present()) {
-		printf(" failed - OTA not present in current VDP\r\n\r\n");
-		printf("Program the VDP using Arduino / PlatformIO / esptool\r\n\r\n");
-		return false;
-	}
-
-	file = mos_fopen(filename, fa_read);
-	// Do actual work here
-	printf("Updating VDP firmware\r\n");
-	filesize = getFileSize(file);	
-	startVDPupdate(file, filesize);
-	mos_fclose(file);
-	return true;
-}
-
-bool update_mos(char *filename) {
+bool update_mos(void) {
 	uint32_t crcresult;
 	uint24_t got;
 	uint8_t file;
@@ -188,32 +82,10 @@ bool update_mos(char *filename) {
 	uint8_t value;
 	uint24_t counter,pagemax, lastpagebytes;
 	uint24_t addressto,addressfrom;
-	uint24_t filesize;
 	int attempt;
 	bool success = false;
 
-	putch(12); // cls
-	print_version();	
-	
 	printf("Programming MOS firmware to ez80 flash...\r\n\r\n");
-	printf("Reading MOS firmware");
-	file = mos_fopen(filename, fa_read);
-	filesize = getFileSize(file);
-	// Read file to memory
-	crc32_initialize();
-	while((got = mos_fread(file, ptr, BLOCKSIZE)) > 0) {
-		crc32(ptr, got);
-		ptr += got;
-		putch('.');
-	}
-	crcresult = crc32_finalize();
-	printf("\r\n");
-	// Final memory check to given crc32
-	if(crcresult != moscrc) {
-		printf("Error reading file to memory\r\n");
-		return false;
-	}
-	printf("\r\n");	
 	// Actual work here	
 	di();								// prohibit any access to the old MOS firmware
 
@@ -286,140 +158,37 @@ bool update_mos(char *filename) {
 	return success;
 }
 
-void echoVDP(uint8_t value) {
-	putch(23);
-	putch(0);
-	putch(0x80);
-	putch(value);
-	delayms(100);
-}
-
-int getCommand(const char *command) {
-	if(memcmp(command, "all\0", 4) == 0) return CMDALL;
-	if(memcmp(command, "mos\0", 4) == 0) return CMDMOS;
-	if(memcmp(command, "vdp\0", 4) == 0) return CMDVDP;
-	if(memcmp(command, "batch\0", 6) == 0) return CMDBATCH;
-	if(memcmp(command, "-f\0", 3) == 0) return CMDFORCE;
-	if(memcmp(command, "force\0", 6) == 0) return CMDFORCE;
-	if(memcmp(command, "-force\0", 7) == 0) return CMDFORCE;
-	return CMDUNKNOWN;
-}
-
-bool parseCommands(int argc, char *argv[]) {
-	int argcounter;
-	int command;
-
-	argcounter = 1;
-	while(argcounter < argc) {
-		command = getCommand(argv[argcounter]);
-		switch(command) {
-			case CMDUNKNOWN:
-				return false;
-				break;
-			case CMDALL:
-				if(flashmos || flashvdp) return false;
-				strcpy(mosfilename, DEFAULT_MOSFIRMWARE);
-				strcpy(vdpfilename, DEFAULT_VDPFIRMWARE);
-				flashmos = true;
-				flashvdp = true;
-				break;
-			case CMDMOS:
-				if(flashmos) return false;
-				if((argc > (argcounter+1)) && (getCommand(argv[argcounter + 1]) == CMDUNKNOWN)) {
-					strcpy(mosfilename, argv[argcounter + 1]);
-					argcounter++;
-				}
-				else {
-					strcpy(mosfilename, DEFAULT_MOSFIRMWARE);
-				}
-				flashmos = true;
-				break;
-			case CMDVDP:
-				if(flashvdp) return false;
-				if((argc > (argcounter+1)) && (getCommand(argv[argcounter + 1]) == CMDUNKNOWN)) {
-					strcpy(vdpfilename, argv[argcounter + 1]);
-					argcounter++;
-				}
-				else {
-					strcpy(vdpfilename, DEFAULT_VDPFIRMWARE);
-				}
-				flashvdp = true;
-				break;
-			case CMDBATCH:
-				if(optbatch) return false;
-				optbatch = true;
-				optforce = true;
-				break;
-			case CMDFORCE:
-				if(optforce && !optbatch) return false;
-				optforce = true;
-				break;
-		}
-		argcounter++;
-	}
-	return (flashvdp || flashmos);
-}
-
 bool filesExist(void) {
 	uint8_t file;
 	bool filesexist = true;
 
-	if(flashmos) {
-		file = mos_fopen(mosfilename, fa_read);
-		if(!file) {
-			printf("Error opening MOS firmware \"%s\"\n\r",mosfilename);
-			filesexist = false;
-		}
-		mos_fclose(file);
+	file = mos_fopen(mosfilename, fa_read);
+	if(!file) {
+		printf("Error opening MOS firmware \"%s\"\n\r",mosfilename);
+		filesexist = false;
 	}
-
-	if(flashvdp) {
-		file = mos_fopen(vdpfilename, fa_read);
-		if(!file) {
-			printf("Error opening VDP firmware \"%s\"\n\r",vdpfilename);
-			filesexist = false;
-		}
-		mos_fclose(file);
-	}
+	mos_fclose(file);
 
 	return filesexist;
 }
 
-bool validFirmwareFiles(void) {
+bool validFirmware(void) {
 	uint8_t file;
-	uint24_t filesize;
-	uint8_t buffer[ESP32_MAGICLENGTH + ESP32_MAGICSTART];
 	bool validfirmware = true;
 
-	if(flashmos) {
-		file = mos_fopen(mosfilename, fa_read);
-		mos_fread(file, (char *)BUFFER1, MOS_MAGICLENGTH);
-		if(!containsMosHeader((uint8_t *)BUFFER1)) {
-			printf("\"%s\" does not contain valid MOS ez80 startup code\r\n", mosfilename);
-			validfirmware = false;
-		}
-		filesize = getFileSize(file);
-		if(filesize > FLASHSIZE) {
-			printf("\"%s\" too large for 128KB embedded flash\r\n", mosfilename);
-			validfirmware = false;
-		}
-		mos_fclose(file);
+	if(!containsMosHeader((uint8_t *)BUFFER1)) {
+		printf("\"%s\" does not contain valid MOS ez80 startup code\r\n", mosfilename);
+		validfirmware = false;
 	}
-	if(flashvdp) {
-		file = mos_fopen(vdpfilename, fa_read);
-		mos_fread(file, (char *)buffer, ESP32_MAGICLENGTH + ESP32_MAGICSTART);
-		if(!containsESP32Header(buffer)) {
-			printf("\"%s\" does not contain valid ESP32 code\r\n", vdpfilename);
-			validfirmware = false;
-		}
-		mos_fclose(file);
+	if(filesize > FLASHSIZE) {
+		printf("\"%s\" too large for 128KB embedded flash\r\n", mosfilename);
+		validfirmware = false;
 	}
 	return validfirmware;
 }
 
 void showCRC32(void) {
-	if(flashmos) printf("MOS CRC 0x%04lX\r\n", moscrc);
-	if(flashvdp) printf("VDP CRC 0x%04lX\r\n", vdpcrc);
+	printf("MOS CRC 0x%04lX\r\n", moscrc);
 	printf("\r\n");
 }
 
@@ -429,37 +198,32 @@ void calculateCRC32(void) {
 	char* ptr;
 
 	moscrc = 0;
-	vdpcrc = 0;
 
-	printf("Calculating CRC");
+	printf("\r\nCalculating CRC...\r\n");
 
-	if(flashmos) {
-		ptr = (char*)BUFFER1;
-		file = mos_fopen(mosfilename, fa_read);
-		crc32_initialize();
-		
-		// Read file to memory
-		while((got = mos_fread(file, ptr, BLOCKSIZE)) > 0) {
-			crc32(ptr, got);
-			ptr += got;
-			putch('.');
-		}		
-		moscrc = crc32_finalize();
-		mos_fclose(file);
-	}
-	if(flashvdp) {
-		file = mos_fopen(vdpfilename, fa_read);
-		crc32_initialize();
-		while(1) {
-			size = mos_fread(file, (char *)BUFFER1, BLOCKSIZE);
-			if(size == 0) break;
-			putch('.');
-			crc32((char *)BUFFER1, size);
-		}
-		vdpcrc = crc32_finalize();
-		mos_fclose(file);
-	}
+	ptr = (char*)BUFFER1;
+	crc32_initialize();
+	crc32(ptr, filesize);	
+	moscrc = crc32_finalize();
 	printf("\r\n\r\n");
+}
+
+uint24_t readMemory(const char *filename) {
+	uint8_t file;
+	char* ptr = (char*)BUFFER1;
+	uint24_t size = 0;
+
+	printf("Reading \"MOS.bin\" to memory");
+	file = mos_fopen(mosfilename, fa_read);
+	while(!mos_feof(file))
+	{
+		*ptr = mos_fgetc(file);
+		ptr++;
+		size++;
+		if(size%2048 == 0) printf(".");
+	}
+	mos_fclose(file);
+	return size;
 }
 
 int main(int argc, char * argv[]) {	
@@ -468,71 +232,33 @@ int main(int argc, char * argv[]) {
 	uint16_t tmp;
 	sysvars = getsysvars();
 
+	strcpy(mosfilename, DEFAULT_MOSFIRMWARE);
+
 	// All checks
-	if(argc == 1) {
-		usage();
-		return 0;
-	}
-	if(!parseCommands(argc, argv)) {
-		usage();
-		return EXIT_INVALIDPARAMETER;
-	}
 	if(!filesExist()) return EXIT_FILENOTFOUND;
-	if(!validFirmwareFiles()) {
+	if(!validFirmware()) {
 		return EXIT_INVALIDPARAMETER;
 	}
 
 	putch(12);
 	print_version();
+
+	filesize = readMemory(mosfilename);
+	if(filesize == 0) {
+		printf("\r\nError reading from SD card\r\n");
+		return 0;
+	}
+
 	calculateCRC32();
-	// Skip showing CRC32 and user input when 'silent' is requested
-	if(!optforce) {
-		putch(12);
-		print_version();
-		showCRC32();
-		if(!getResponse()) return 0;
-	}
-	if(optbatch) beep(1);
 
-	if(flashvdp) {
-		while(sysvars->scrheight == 0); // wait for 1st feedback from VDP
-		tmp = sysvars->scrheight;
-		sysvars->scrheight = 0;
-		if(update_vdp(vdpfilename)) {
-			echoVDP(1);
-			while(sysvars->scrheight == 0);
-			if(optbatch) beep(2);
-		}
-		else {
-			if(!optforce && flashmos) {
-				askEscapeToContinue();
-				sysvars->scrheight = tmp;
-			}
-		}
-	}
+	showCRC32();
+	if(!getResponse()) return 0;
 
-	if(flashmos) {
-		if(update_mos(mosfilename)) {
-			printf("\r\nDone\r\n\r\n");
-			if(optbatch) {
-				printf("Press reset button");
-				beep(3);
-				while(1); // don't repeatedly run this command batched (autoexec.txt)
-			}
-			else {
-				printf("System reset in ");
-				for(n = 3; n > 0; n--) {
-					printf("%d...", n);
-					delayms(1000);
-				}
-				reset();
-			}
-		}
-		else {
-			printf("\r\nMultiple errors occured during flash write.\r\n");
-			printf("Bare-metal recovery required.\r\n");
-			while(1); // No live MOS to return to
-		}
+	if(update_mos()) {
+		printf("Done\r\n\r\n");
+		printf("Please don't forget to update the VDP\r\n");
+		printf("It is OK to reset or shut down the system now ");
+		while(1); // No live MOS to return to
 	}
 	return 0;
 }
