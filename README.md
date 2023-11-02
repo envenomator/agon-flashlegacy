@@ -3,7 +3,7 @@ The Agon firmware update utility is able to flash MOS a file on the SD card on a
 
 ### Installation
 Place these files in the **root** directory of the microSD card:
-- The legacy [flash.bin](https://github.com/envenomator/agon-legacyflash/blob/master/binaries/flash.bin) utility
+- The legacy [flash.bin](https://github.com/envenomator/agon-flashlegacy/blob/master/binaries/flash.bin) utility
 - The required MOS firmware file - MOS.bin
 
 ### Usage
