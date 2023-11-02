@@ -1,0 +1,769 @@
+
+IEEE 695 OMF Linker Version 6.25 (19073001)
+Copyright (C) 1999-2008 Zilog, Inc. All Rights Reserved
+
+LINK MAP:
+
+DATE:      Thu Nov 02 12:23:05 2023
+PROCESSOR: assembler
+FILES:     .\init.obj             .\main.obj             
+           .\mos-interface.obj
+           .\flash.obj            .\agontimer.obj        .\strtoll.obj          
+           .\crc32.obj            .\filesize.obj         
+           C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\chelpD.lib
+           C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\crtD.lib
+           C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\crtSD.lib
+           C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\nokernelD.lib
+           C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\zilog\zsldevinitdummy.obj
+           
+
+
+COMMAND LIST:
+=============
+-FORMAT=OMF695,INTEL32
+-map -maxhexlen=64 -quiet -warnoverlap -xref -unresolved=fatal
+-sort NAME=ascending -warn -debug -NOigcase
+
+
+RANGE RAM $040000 : $0AFFFF
+RANGE EXTIO $000000 : $00FFFF
+RANGE INTIO $000000 : $0000FF
+
+CHANGE TEXT = RAM
+CHANGE CODE = RAM
+CHANGE STRSECT = RAM
+CHANGE DATA = RAM 
+
+ORDER CODE,DATA
+
+DEFINE __low_bss = base of BSS
+DEFINE __len_bss = length of BSS
+
+ "flash"=  ".\init.obj",  ".\main.obj",  ".\mos-interface.obj",  ".\flash.obj",  ".\agontimer.obj",  ".\strtoll.obj",  ".\crc32.obj",  ".\filesize.obj",  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\chelpD.lib",  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\crtD.lib",  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\crtSD.lib",  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\nokernelD.lib",  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\zilog\zsldevinitdummy.obj"
+
+
+SPACE ALLOCATION:
+=================
+
+Space                     Base         Top      Size      Used    Unused
+------------------ ----------- ----------- --------- --------- ---------
+RAM                   D:040000    D:042EA4    70000H     2D03H    6D2FDH
+                                          (   458752     11523    447229)
+
+
+SEGMENTS WITHIN SPACE:
+======================
+
+RAM                               Type        Base         Top      Size
+------------------ ------------------- ----------- ----------- ---------
+BSS                normal data            D:042C74    D:042EA4      231h
+CODE               normal data            D:040000    D:042220     2221h
+DATA               normal data            D:042221    D:042886      4c4h
+STRSECT            normal data            D:042887    D:042C73      3edh
+
+SEGMENTS WITHIN MODULES:
+========================
+
+Module: ..\agontimer.c (File: agontimer.obj) Version: 1:0 11/02/2023 12:23:05
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:0413A2    D:041403       62h
+
+
+Module: ..\main.c (File: main.obj) Version: 1:0 11/02/2023 12:23:05
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: BSS                               D:042C74    D:042E7E      20bh
+    Segment: CODE                              D:0400E5    D:04119F     10bbh
+    Segment: DATA                              D:042251    D:04225D        dh
+    Segment: STRSECT                           D:042887    D:042C73      3edh
+
+
+Module: ..\src\boot\common\zsldevinitdummy.asm (File: zsldevinitdummy.obj) Version: 1:0 10/02/2022 22:49:19
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041657    D:041657        1h
+
+
+Module: ..\strtoll.c (File: strtoll.obj) Version: 1:0 11/02/2023 12:23:05
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041404    D:041587      184h
+
+
+Module: .\rtl\common\abs.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:07
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041893    D:0418BB       29h
+
+
+Module: .\rtl\common\case8D.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:53
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041F15    D:041F4E       3ah
+
+
+Module: .\rtl\common\iand.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041F95    D:041FAF       1bh
+
+
+Module: .\rtl\common\icmpzero.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:52
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041C33    D:041C3E        ch
+
+
+Module: .\rtl\common\indcall.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:042010    D:042011        2h
+
+
+Module: .\rtl\common\ineg.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041F4F    D:041F57        9h
+
+
+Module: .\rtl\common\isalpha.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:08
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041E49    D:041E71       29h
+
+
+Module: .\rtl\common\isdigit.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:08
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041C3F    D:041C67       29h
+
+
+Module: .\rtl\common\ishrs.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:0416A5    D:0416C9       25h
+
+
+Module: .\rtl\common\ishru.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041EE9    D:041F0D       25h
+
+
+Module: .\rtl\common\isspace.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:09
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041C68    D:041C90       29h
+
+
+Module: .\rtl\common\isupper.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:09
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:04167C    D:0416A4       29h
+
+
+Module: .\rtl\common\itol.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041F0E    D:041F14        7h
+
+
+Module: .\rtl\common\ladd.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041658    D:04166C       15h
+
+
+Module: .\rtl\common\lcmpu.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041F58    D:041F6D       16h
+
+
+Module: .\rtl\common\lcmpzero.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:52
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041BBF    D:041BD2       14h
+
+
+Module: .\rtl\common\ldivu.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041BD3    D:041C08       36h
+
+
+Module: .\rtl\common\lmulu.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:0421B4    D:042220       6dh
+
+
+Module: .\rtl\common\lneg.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041BB2    D:041BBE        dh
+
+
+Module: .\rtl\common\lremu.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041FB0    D:041FBF       10h
+
+
+Module: .\rtl\common\maptab.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:09
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: DATA                              D:042807    D:042886       80h
+
+
+Module: .\rtl\common\memcmp.asm (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:13
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041C09    D:041C32       2ah
+
+
+Module: .\rtl\common\print_globals.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:26
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: BSS                               D:042E7F    D:042EA4       26h
+    Segment: DATA                              D:042804    D:042806        3h
+
+
+Module: .\rtl\common\print_putch.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:26
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041FF2    D:04200F       1eh
+
+
+Module: .\rtl\common\print_putstring.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:27
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041705    D:04186F      16bh
+
+
+Module: .\rtl\common\print_send.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:27
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041C91    D:041E48      1b8h
+
+
+Module: .\rtl\common\print_sputch.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:26
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:0418BC    D:0418E6       2bh
+
+
+Module: .\rtl\common\print_uputch.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:26
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041876    D:041892       1dh
+
+
+Module: .\rtl\common\scmpzero.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:52
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041F88    D:041F94        dh
+
+
+Module: .\rtl\common\seqcaseD.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:52
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:0416CA    D:041704       3bh
+
+
+Module: .\rtl\common\setflag.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:52
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:04166D    D:04167B        fh
+
+
+Module: .\rtl\common\sor.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:51
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:042012    D:04201A        9h
+
+
+Module: .\rtl\common\stoiu.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:51
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041870    D:041875        6h
+
+
+Module: .\rtl\common\tolower.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:12
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041FC0    D:041FF1       32h
+
+
+Module: .\rtl\common\uitoa.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:27
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:0418FC    D:04191D       22h
+
+
+Module: .\rtl\common\ultoa.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:28
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:04191E    D:041BB1      294h
+
+
+Module: .\rtl\common\ureverse.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:13
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041E72    D:041EE8       77h
+
+
+Module: .\rtl\common\uultoa.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:29
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:04201B    D:0421B3      199h
+
+
+Module: .\strcpy.asm (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:13
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041F6E    D:041F87       1ah
+
+
+Module: .\strlen.asm (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:13
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:0418E7    D:0418FB       15h
+
+
+Module: C:\source\agon-flashlegacy\src\crc32.asm (File: crc32.obj) Version: 1:0 11/02/2023 12:23:05
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:041588    D:041639       b2h
+    Segment: DATA                              D:042400    D:042803      404h
+
+
+Module: C:\source\agon-flashlegacy\src\filesize.asm (File: filesize.obj) Version: 1:0 11/02/2023 12:23:05
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:04163A    D:041656       1dh
+
+
+Module: C:\source\agon-flashlegacy\src\flash.asm (File: flash.obj) Version: 1:0 11/02/2023 12:23:05
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:0412D1    D:0413A1       d1h
+
+
+Module: C:\source\agon-flashlegacy\src\init.asm (File: init.obj) Version: 1:0 11/02/2023 12:23:04
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:040000    D:0400E4       e5h
+    Segment: DATA                              D:042221    D:042250       30h
+
+
+Module: C:\source\agon-flashlegacy\src\mos-interface.asm (File: mos-interface.obj) Version: 1:0 11/02/2023 12:23:05
+
+    Name                                           Base         Top      Size
+    --------------------------------------- ----------- ----------- ---------
+    Segment: CODE                              D:0411A0    D:0412D0      131h
+
+EXTERNAL DEFINITIONS:
+=====================
+
+Symbol                               Address Module          Segment
+-------------------------------- ----------- --------------- --------------------------------
+___maptab                           D:042807 maptab          DATA                            
+___print_buff                       D:042E7F print_globals   BSS                             
+___print_fmt                        D:042E8D print_globals   BSS                             
+___print_leading_char               D:042EA1 print_globals   BSS                             
+___print_len                        D:042EA0 print_globals   BSS                             
+___print_out                        D:042EA2 print_globals   BSS                             
+___print_putch                      D:041FF2 print_putch     CODE                            
+___print_send                       D:041C91 print_send      CODE                            
+___print_sendstring                 D:041705 print_putstring CODE                            
+___print_sputch                     D:0418BC print_sputch    CODE                            
+___print_uputch                     D:041876 print_uputch    CODE                            
+___print_xputch                     D:042804 print_globals   DATA                            
+__case8D                            D:041F15 case8D          CODE                            
+__close_periphdevice                D:041657 zsldevinitdummy CODE                            
+__iand                              D:041F95 iand            CODE                            
+__icmpzero                          D:041C33 icmpzero        CODE                            
+__indcall                           D:042010 indcall         CODE                            
+__ineg                              D:041F4F ineg            CODE                            
+__ishrs                             D:0416AD ishrs           CODE                            
+__ishrs_b                           D:0416A5 ishrs           CODE                            
+__ishru                             D:041EF1 ishru           CODE                            
+__ishru_b                           D:041EE9 ishru           CODE                            
+__itol                              D:041F0E itol            CODE                            
+__ladd                              D:041667 ladd            CODE                            
+__ladd_b                            D:041658 ladd            CODE                            
+__lcmps                             D:041F58 lcmpu           CODE                            
+__lcmpu                             D:041F58 lcmpu           CODE                            
+__lcmpzero                          D:041BBF lcmpzero        CODE                            
+__ldivu                             D:041BD3 ldivu           CODE                            
+__ldvrmu                            D:041BE5 ldivu           CODE                            
+__len_bss                           00000231 (User Defined)
+__lmuls                             D:0421B4 lmulu           CODE                            
+__lmulu                             D:0421B4 lmulu           CODE                            
+__lneg                              D:041BB2 lneg            CODE                            
+__low_bss                           00042C74 (User Defined)
+__lremu                             D:041FB0 lremu           CODE                            
+__open_periphdevice                 D:041657 zsldevinitdummy CODE                            
+__scmpzero                          D:041F88 scmpzero        CODE                            
+__seqcaseD                          D:0416CA seqcaseD        CODE                            
+__setflag                           D:04166D setflag         CODE                            
+__sneg                              D:041F4F ineg            CODE                            
+__sor                               D:042012 sor             CODE                            
+__stoiu                             D:041870 stoiu           CODE                            
+__u_itoa                            D:0418FC uitoa           CODE                            
+__u_ltoa                            D:04191E ultoa           CODE                            
+__u_reverse                         D:041E72 ureverse        CODE                            
+__u_ultoa                           D:04201B uultoa          CODE                            
+_abs                                D:041893 abs             CODE                            
+_askEscapeToContinue                D:0403F9 main            CODE                            
+_beep                               D:04010B main            CODE                            
+_calculateCRC32                     D:040E48 main            CODE                            
+_close_periphdevice                 D:041657 zsldevinitdummy CODE                            
+_containsESP32Header                D:0402DB main            CODE                            
+_containsMosHeader                  D:040290 main            CODE                            
+_crc32                              D:0415DA crc32           CODE                            
+_crc32_finalize                     D:04159D crc32           CODE                            
+_crc32_initialize                   D:041588 crc32           CODE                            
+_delayms                            D:0413A2 agontimer       CODE                            
+_echoVDP                            D:040872 main            CODE                            
+_enableFlashKeyRegister             D:0412D1 flash           CODE                            
+_errno                              D:042C74 main            BSS                             
+_esp32_magicnumbers                 D:04225A main            DATA                            
+_fastmemcpy                         D:0412FE flash           CODE                            
+_filesExist                         D:040B93 main            CODE                            
+_flashmos                           D:042251 main            DATA                            
+_flashvdp                           D:042252 main            DATA                            
+_getch                              D:0411A0 mos-interface   CODE                            
+_getCharAt                          D:040141 main            CODE                            
+_getCommand                         D:0408B5 main            CODE                            
+_getFileSize                        D:04163A filesize        CODE                            
+_getResponse                        D:040375 main            CODE                            
+_getsysvar_cursorX                  D:0411D2 mos-interface   CODE                            
+_getsysvar_cursorY                  D:0411DE mos-interface   CODE                            
+_getsysvar_scrchar                  D:0411EA mos-interface   CODE                            
+_getsysvars                         D:0411C6 mos-interface   CODE                            
+_isalpha                            D:041E49 isalpha         CODE                            
+_isdigit                            D:041C3F isdigit         CODE                            
+_isspace                            D:041C68 isspace         CODE                            
+_isupper                            D:04167C isupper         CODE                            
+_lockFlashKeyRegister               D:0412E9 flash           CODE                            
+_main                               D:040F8D main            CODE                            
+_memcmp                             D:041C09 memcmp          CODE                            
+_mos_del                            D:041282 mos-interface   CODE                            
+_mos_fclose                         D:04120E mos-interface   CODE                            
+_mos_feof                           D:04126D mos-interface   CODE                            
+_mos_fgetc                          D:041223 mos-interface   CODE                            
+_mos_flseek                         D:0412B2 mos-interface   CODE                            
+_mos_fopen                          D:0411F6 mos-interface   CODE                            
+_mos_fread                          D:041238 mos-interface   CODE                            
+_mos_magicnumbers                   D:042255 main            DATA                            
+_mos_save                           D:041297 mos-interface   CODE                            
+_moscrc                             D:042D77 main            BSS                             
+_mosfilename                        D:042C77 main            BSS                             
+_open_periphdevice                  D:041657 zsldevinitdummy CODE                            
+_optbatch                           D:042253 main            DATA                            
+_optforce                           D:042254 main            DATA                            
+_parseCommands                      D:0409B3 main            CODE                            
+_print_version                      D:04032F main            CODE                            
+_putch                              D:0400E5 main            CODE                            
+_reset                              D:0412FC flash           CODE                            
+_showCRC32                          D:040D93 main            CODE                            
+_startVDPupdate                     D:04131D flash           CODE                            
+_strcpy                             D:041F6E strcpy          CODE                            
+_strlen                             D:0418E7 strlen          CODE                            
+_strtoll                            D:041404 strtoll         CODE                            
+_tolower                            D:041FC0 tolower         CODE                            
+_update_mos                         D:0404FE main            CODE                            
+_update_vdp                         D:04044E main            CODE                            
+_usage                              D:040350 main            CODE                            
+_validFirmwareFiles                 D:040C50 main            CODE                            
+_vdp_ota_present                    D:0401E3 main            CODE                            
+_vdpcrc                             D:042E7B main            BSS                             
+_vdpfilename                        D:042D7B main            BSS                             
+_waitvblank                         D:0411B5 mos-interface   CODE                            
+
+114 external symbol(s).
+
+SYMBOL CROSS REFERENCE:
+=======================
+Name                              Use         Module
+--------------------------------- ----------- -------------------------
+___maptab                         Defined     .\rtl\common\maptab.c
+                                  Referenced  .\rtl\common\isupper.c
+                                  Referenced  .\rtl\common\isdigit.c
+                                  Referenced  .\rtl\common\isspace.c
+                                  Referenced  .\rtl\common\isalpha.c
+___print_buff                     Defined     .\rtl\common\print_globals.c
+                                  Referenced  .\rtl\common\ultoa.c
+                                  Referenced  .\rtl\common\print_send.c
+                                  Referenced  .\rtl\common\uultoa.c
+___print_fmt                      Defined     .\rtl\common\print_globals.c
+                                  Referenced  ..\main.c
+                                  Referenced  .\rtl\common\print_putstring.c
+                                  Referenced  .\rtl\common\ultoa.c
+                                  Referenced  .\rtl\common\print_send.c
+                                  Referenced  .\rtl\common\uultoa.c
+___print_leading_char             Defined     .\rtl\common\print_globals.c
+                                  Referenced  .\rtl\common\ultoa.c
+                                  Referenced  .\rtl\common\print_send.c
+___print_len                      Defined     .\rtl\common\print_globals.c
+                                  Referenced  .\rtl\common\print_putstring.c
+                                  Referenced  .\rtl\common\print_send.c
+___print_out                      Defined     .\rtl\common\print_globals.c
+                                  Referenced  .\rtl\common\print_sputch.c
+___print_putch                    Defined     .\rtl\common\print_putch.c
+                                  Referenced  .\rtl\common\print_putstring.c
+                                  Referenced  .\rtl\common\print_send.c
+___print_send                     Defined     .\rtl\common\print_send.c
+                                  Referenced  .\rtl\common\ultoa.c
+                                  Referenced  .\rtl\common\uultoa.c
+___print_sendstring               Defined     .\rtl\common\print_putstring.c
+                                  Referenced  ..\main.c
+___print_sputch                   Defined     .\rtl\common\print_sputch.c
+                                  Referenced  .\rtl\common\print_globals.c
+___print_uputch                   Defined     .\rtl\common\print_uputch.c
+                                  Referenced  ..\main.c
+___print_xputch                   Defined     .\rtl\common\print_globals.c
+                                  Referenced  ..\main.c
+                                  Referenced  .\rtl\common\print_putch.c
+__case8D                          Defined     .\rtl\common\case8D.asm
+                                  Referenced  .\rtl\common\ultoa.c
+                                  Referenced  .\rtl\common\uultoa.c
+__close_periphdevice              Defined     ..\src\boot\common\zsldevinitdummy.asm
+__iand                            Defined     .\rtl\common\iand.asm
+                                  Referenced  ..\main.c
+__icmpzero                        Defined     .\rtl\common\icmpzero.asm
+                                  Referenced  ..\main.c
+                                  Referenced  ..\agontimer.c
+                                  Referenced  ..\strtoll.c
+                                  Referenced  .\rtl\common\abs.c
+                                  Referenced  .\rtl\common\tolower.c
+__indcall                         Defined     .\rtl\common\indcall.asm
+                                  Referenced  .\rtl\common\print_putch.c
+__ineg                            Defined     .\rtl\common\ineg.asm
+                                  Referenced  .\rtl\common\abs.c
+__ishrs                           Defined     .\rtl\common\ishrs.asm
+__ishrs_b                         Defined     .\rtl\common\ishrs.asm
+                                  Referenced  ..\main.c
+__ishru                           Defined     .\rtl\common\ishru.asm
+__ishru_b                         Defined     .\rtl\common\ishru.asm
+                                  Referenced  ..\main.c
+__itol                            Defined     .\rtl\common\itol.asm
+                                  Referenced  ..\main.c
+                                  Referenced  ..\strtoll.c
+                                  Referenced  .\rtl\common\uitoa.c
+__ladd                            Defined     .\rtl\common\ladd.asm
+                                  Referenced  ..\strtoll.c
+__ladd_b                          Defined     .\rtl\common\ladd.asm
+__lcmps                           Defined     .\rtl\common\lcmpu.asm
+__lcmpu                           Defined     .\rtl\common\lcmpu.asm
+                                  Referenced  ..\main.c
+                                  Referenced  .\rtl\common\ultoa.c
+                                  Referenced  .\rtl\common\lcmpzero.asm
+__lcmpzero                        Defined     .\rtl\common\lcmpzero.asm
+                                  Referenced  .\rtl\common\ultoa.c
+                                  Referenced  .\rtl\common\uultoa.c
+__ldivu                           Defined     .\rtl\common\ldivu.asm
+                                  Referenced  .\rtl\common\ultoa.c
+                                  Referenced  .\rtl\common\uultoa.c
+__ldvrmu                          Defined     .\rtl\common\ldivu.asm
+                                  Referenced  .\rtl\common\lremu.asm
+__len_bss                         Defined     LINKER
+                                  Referenced  C:\source\agon-flashlegacy\src\init.asm
+__lmuls                           Defined     .\rtl\common\lmulu.asm
+__lmulu                           Defined     .\rtl\common\lmulu.asm
+                                  Referenced  ..\strtoll.c
+__lneg                            Defined     .\rtl\common\lneg.asm
+                                  Referenced  .\rtl\common\ultoa.c
+__low_bss                         Defined     LINKER
+                                  Referenced  C:\source\agon-flashlegacy\src\init.asm
+__lremu                           Defined     .\rtl\common\lremu.asm
+                                  Referenced  .\rtl\common\ultoa.c
+                                  Referenced  .\rtl\common\uultoa.c
+__open_periphdevice               Defined     ..\src\boot\common\zsldevinitdummy.asm
+__scmpzero                        Defined     .\rtl\common\scmpzero.asm
+                                  Referenced  ..\main.c
+                                  Referenced  ..\agontimer.c
+__seqcaseD                        Defined     .\rtl\common\seqcaseD.asm
+                                  Referenced  ..\main.c
+__setflag                         Defined     .\rtl\common\setflag.asm
+                                  Referenced  ..\strtoll.c
+                                  Referenced  .\rtl\common\print_putstring.c
+                                  Referenced  .\rtl\common\abs.c
+                                  Referenced  .\rtl\common\ultoa.c
+                                  Referenced  .\rtl\common\print_send.c
+__sneg                            Defined     .\rtl\common\ineg.asm
+__sor                             Defined     .\rtl\common\sor.asm
+                                  Referenced  ..\agontimer.c
+__stoiu                           Defined     .\rtl\common\stoiu.asm
+                                  Referenced  ..\main.c
+__u_itoa                          Defined     .\rtl\common\uitoa.c
+                                  Referenced  ..\main.c
+__u_ltoa                          Defined     .\rtl\common\ultoa.c
+                                  Referenced  .\rtl\common\uitoa.c
+__u_reverse                       Defined     .\rtl\common\ureverse.c
+                                  Referenced  .\rtl\common\ultoa.c
+                                  Referenced  .\rtl\common\uultoa.c
+__u_ultoa                         Defined     .\rtl\common\uultoa.c
+                                  Referenced  ..\main.c
+_abs                              Defined     .\rtl\common\abs.c
+                                  Referenced  .\rtl\common\print_putstring.c
+                                  Referenced  .\rtl\common\print_send.c
+_askEscapeToContinue              Defined     ..\main.c
+_beep                             Defined     ..\main.c
+_calculateCRC32                   Defined     ..\main.c
+_close_periphdevice               Defined     ..\src\boot\common\zsldevinitdummy.asm
+_containsESP32Header              Defined     ..\main.c
+_containsMosHeader                Defined     ..\main.c
+_crc32                            Defined     C:\source\agon-flashlegacy\src\crc32.asm
+                                  Referenced  ..\main.c
+_crc32_finalize                   Defined     C:\source\agon-flashlegacy\src\crc32.asm
+                                  Referenced  ..\main.c
+_crc32_initialize                 Defined     C:\source\agon-flashlegacy\src\crc32.asm
+                                  Referenced  ..\main.c
+_delayms                          Defined     ..\agontimer.c
+                                  Referenced  ..\main.c
+_echoVDP                          Defined     ..\main.c
+_enableFlashKeyRegister           Defined     C:\source\agon-flashlegacy\src\flash.asm
+                                  Referenced  ..\main.c
+_errno                            Defined     ..\main.c
+                                  Referenced  ..\strtoll.c
+_esp32_magicnumbers               Defined     ..\main.c
+_fastmemcpy                       Defined     C:\source\agon-flashlegacy\src\flash.asm
+                                  Referenced  ..\main.c
+_filesExist                       Defined     ..\main.c
+_flashmos                         Defined     ..\main.c
+_flashvdp                         Defined     ..\main.c
+_getch                            Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+                                  Referenced  ..\main.c
+_getCharAt                        Defined     ..\main.c
+_getCommand                       Defined     ..\main.c
+_getFileSize                      Defined     C:\source\agon-flashlegacy\src\filesize.asm
+                                  Referenced  ..\main.c
+_getResponse                      Defined     ..\main.c
+_getsysvar_cursorX                Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+_getsysvar_cursorY                Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+_getsysvar_scrchar                Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+_getsysvars                       Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+                                  Referenced  ..\main.c
+_isalpha                          Defined     .\rtl\common\isalpha.c
+                                  Referenced  ..\strtoll.c
+_isdigit                          Defined     .\rtl\common\isdigit.c
+                                  Referenced  ..\strtoll.c
+_isspace                          Defined     .\rtl\common\isspace.c
+                                  Referenced  ..\strtoll.c
+_isupper                          Defined     .\rtl\common\isupper.c
+                                  Referenced  ..\strtoll.c
+                                  Referenced  .\rtl\common\tolower.c
+_lockFlashKeyRegister             Defined     C:\source\agon-flashlegacy\src\flash.asm
+                                  Referenced  ..\main.c
+_main                             Defined     ..\main.c
+                                  Referenced  C:\source\agon-flashlegacy\src\init.asm
+_memcmp                           Defined     .\rtl\common\memcmp.asm
+                                  Referenced  ..\main.c
+_mos_del                          Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+_mos_fclose                       Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+                                  Referenced  ..\main.c
+_mos_feof                         Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+_mos_fgetc                        Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+_mos_flseek                       Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+_mos_fopen                        Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+                                  Referenced  ..\main.c
+_mos_fread                        Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+                                  Referenced  ..\main.c
+_mos_magicnumbers                 Defined     ..\main.c
+_mos_save                         Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+_moscrc                           Defined     ..\main.c
+_mosfilename                      Defined     ..\main.c
+_open_periphdevice                Defined     ..\src\boot\common\zsldevinitdummy.asm
+_optbatch                         Defined     ..\main.c
+_optforce                         Defined     ..\main.c
+_parseCommands                    Defined     ..\main.c
+_print_version                    Defined     ..\main.c
+_putch                            Defined     ..\main.c
+                                  Referenced  .\rtl\common\print_uputch.c
+_reset                            Defined     C:\source\agon-flashlegacy\src\flash.asm
+                                  Referenced  ..\main.c
+_showCRC32                        Defined     ..\main.c
+_startVDPupdate                   Defined     C:\source\agon-flashlegacy\src\flash.asm
+                                  Referenced  ..\main.c
+_strcpy                           Defined     .\strcpy.asm
+                                  Referenced  ..\main.c
+_strlen                           Defined     .\strlen.asm
+                                  Referenced  .\rtl\common\print_putstring.c
+                                  Referenced  .\rtl\common\print_send.c
+                                  Referenced  .\rtl\common\ureverse.c
+                                  Referenced  .\strcpy.asm
+_strtoll                          Defined     ..\strtoll.c
+_tolower                          Defined     .\rtl\common\tolower.c
+                                  Referenced  ..\main.c
+_update_mos                       Defined     ..\main.c
+_update_vdp                       Defined     ..\main.c
+_usage                            Defined     ..\main.c
+_validFirmwareFiles               Defined     ..\main.c
+_vdp_ota_present                  Defined     ..\main.c
+_vdpcrc                           Defined     ..\main.c
+_vdpfilename                      Defined     ..\main.c
+_waitvblank                       Defined     C:\source\agon-flashlegacy\src\mos-interface.asm
+
+OUTPUT CHECKSUM
+===============
+flash.hex            11F6C0
+flash.lod            11F6C0
+
+
+
+END OF LINK MAP:
+================
+0 Errors
+0 Warnings
