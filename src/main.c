@@ -11,6 +11,7 @@
  * 07/06/2023:		Included faster crc32, by Leigh Brown
  * 14/10/2023:		VDP update code, MOS update rewritten for simplicity
  * 02/11/2023:		Batched mode, rewrite of UI
+ * 03/12/2023:		Bugfix reading MOS.bin into memory
  */
 
 #include <ez80.h>
@@ -236,6 +237,11 @@ int main(int argc, char * argv[]) {
 
 	// All checks
 	if(!filesExist()) return EXIT_FILENOTFOUND;
+	filesize = readMemory(mosfilename);
+	if(filesize == 0) {
+		printf("\r\nError reading from SD card\r\n");
+		return 0;
+	}
 	if(!validFirmware()) {
 		return EXIT_INVALIDPARAMETER;
 	}
@@ -243,14 +249,7 @@ int main(int argc, char * argv[]) {
 	putch(12);
 	print_version();
 
-	filesize = readMemory(mosfilename);
-	if(filesize == 0) {
-		printf("\r\nError reading from SD card\r\n");
-		return 0;
-	}
-
 	calculateCRC32();
-
 	showCRC32();
 	if(!getResponse()) return 0;
 
